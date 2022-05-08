@@ -1,11 +1,11 @@
 <template>
   <span class="navbar-text">
     <button
-      class="btn selectable text-success lighten-30 text-uppercase my-2 my-lg-0"
+      class="btn selectable text-success lighten-30 my-2 my-lg-0"
       @click="login"
       v-if="!user.isAuthenticated"
     >
-      Login
+      login
     </button>
 
     <div class="dropdown my-2 my-lg-0" v-else>
@@ -19,10 +19,9 @@
           <img
             :src="account.picture"
             alt="account photo"
-            height="40"
-            class="rounded"
+            height="70"
+            class="rounded pp"
           />
-          <span class="mx-3 text-success lighten-30">{{ account.name }}</span>
         </div>
       </div>
       <div
@@ -80,5 +79,8 @@ export default {
 }
 .hoverable {
   cursor: pointer;
+}
+.pp {
+  height: 8vh;
 }
 </style>

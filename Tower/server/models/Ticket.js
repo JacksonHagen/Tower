@@ -14,13 +14,13 @@ export const TicketSchema = new Schema (
 
 TicketSchema.virtual('account', {
   localField: 'accountId',
-  foreignField: 'id',
+  foreignField: '_id',
   ref: 'Account',
   justOne: true
 })
 TicketSchema.virtual('towerEvent', {
   localField: 'eventId',
-  foreignField: 'id',
+  foreignField: '_id',
   ref: 'TowerEvent',
   justOne: true
 })

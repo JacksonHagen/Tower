@@ -59,6 +59,11 @@ class AccountService {
     await mergeSubsIfNeeded(account, user)
     return account
   }
+  async getTickets(user) {
+    const account = await this.getAccount(user)
+    const tickets = account.tickets
+    return tickets;
+  }
 
   /**
    * Updates account with the request body, will only allow changes to editable fields
