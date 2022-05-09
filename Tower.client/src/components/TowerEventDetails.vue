@@ -32,7 +32,7 @@
               <p class="fw-light">{{ towerEvent.description }}</p>
             </div>
           </div>
-          <div class="row justify-content-between mt-auto">
+          <div class="row mt-auto">
             <div class="col-6 d-flex">
               <h3 class="text-primary me-2">
                 {{ towerEvent.capacity }}
@@ -49,7 +49,7 @@
                 Attend
                 <i class="mdi mdi-crowd mdi-24px"></i>
               </button>
-              <button disabled v-else class="btn btn-warning">Attending</button>
+              <button disabled v-else class="btn btn-info">Attending</button>
             </div>
           </div>
         </div>
@@ -73,6 +73,7 @@ export default {
   },
   setup(props){
     onMounted(async () => {
+      await ticketsService.getUserTickets()
     })
     return {
       account: computed(() => AppState.account),

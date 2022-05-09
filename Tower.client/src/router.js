@@ -19,7 +19,8 @@ const routes = [
   {
     path: '/events/:id',
     name: 'TowerEventDetails',
-    component: loadPage('TowerEventDetailsPage')
+    component: loadPage('TowerEventDetailsPage'),
+    beforeEnter: authGuard
   },
   {
     path: '/account',
