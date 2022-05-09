@@ -41,10 +41,15 @@
             </div>
             <!-- TODO implement the v-if and ticket creation -->
             <div class="col-6 text-end pe-4">
-              <button class="btn btn-warning" @click="handleTicket" v-if="!isAttending()">
+              <button
+                class="btn btn-warning"
+                @click="createTicket()"
+                v-if="!isAttending()"
+              >
                 Attend
                 <i class="mdi mdi-crowd mdi-24px"></i>
               </button>
+              <button disabled v-else class="btn btn-warning">Attending</button>
             </div>
           </div>
         </div>
@@ -55,6 +60,10 @@
 
 
 <script>
+import { computed } from '@vue/reactivity';
+import { AppState } from '../AppState.js';
+import { ticketsService } from "../services/TicketsService.js";
+import { onMounted } from '@vue/runtime-core';
 export default {
   props:{
     towerEvent:{
@@ -63,9 +72,26 @@ export default {
     },
   },
   setup(props){
+    onMounted(async () => {
+    })
     return {
-      async isAttending() {
-        const 
+      account: computed(() => AppState.account),
+      tickets: computed(() => AppState.userTickets),
+      isAttending() {
+        const ticket = this.tickets.find(t => t.accountId === this.account.id)
+        if(!ticket) {
+          return false
+        }
+        return true
+      },
+      async createTicket() {
+        try {
+          await ticketsService.createTicket({eventId: props.towerEvent.id, accountId: this.account.id})
+        }
+        catch(error) {
+          console.error("[could not create ticket]", error.message);
+          Pop.toast(error.message, "error");
+        }
       }
     }
   }
