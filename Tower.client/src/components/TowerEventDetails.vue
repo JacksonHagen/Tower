@@ -41,7 +41,7 @@
             </div>
             <!-- TODO implement the v-if and ticket creation -->
             <div class="col-6 text-end pe-4">
-              <button class="btn btn-warning" @click="">
+              <button class="btn btn-warning" @click="handleTicket" v-if="!isAttending()">
                 Attend
                 <i class="mdi mdi-crowd mdi-24px"></i>
               </button>
@@ -62,9 +62,11 @@ export default {
       required: true
     },
   },
-  setup(){
+  setup(props){
     return {
-      
+      async isAttending() {
+        const 
+      }
     }
   }
 }

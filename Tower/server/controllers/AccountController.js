@@ -13,7 +13,7 @@ export class AccountController extends BaseController {
   }
   async getUserTickets(req, res, next) {
     try {
-      const tickets = await ticketsService.getUserTickets(req.userInfo)
+      const tickets = await ticketsService.getUserTickets(req.userInfo.id)
       res.send(tickets)
     } catch (error) {
       next(error)

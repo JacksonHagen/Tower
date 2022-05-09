@@ -4,10 +4,10 @@ import { accountService } from "./AccountService.js";
 
 class TicketsService {
   async getTowerEventTickets(eventId) {
-    return await dbContext.Tickets.find({eventId}).populate('towerEvent account')
+    return await dbContext.Tickets.find({eventId}).populate('event account')
   }
-  async getUserTickets(userInfo) {
-    return await dbContext.Tickets.find({accountId: userInfo.id}).populate('towerEvent account')
+  async getUserTickets(accountId) {
+    return await dbContext.Tickets.find({accountId}).populate('event')
   }
   async deleteTicket(ticketId, userId) {
     const targetTicket = await dbContext.Tickets.findById(ticketId)
@@ -17,7 +17,7 @@ class TicketsService {
     if(targetTicket.accountId.toString() !== userId.toString()) {
       throw new BadRequest('You cannot delete tickets that are not yours')
     }
-    const towerEvent = await dbContext.TowerEvents.findById(targetTicket.eventId)
+    let towerEvent = await dbContext.TowerEvents.findById(targetTicket.eventId)
     towerEvent.capacity = towerEvent.capacity + 1
     await towerEvent.save()
     await targetTicket.remove()
@@ -30,7 +30,7 @@ class TicketsService {
     towerEvent.capacity = towerEvent.capacity - 1
     await towerEvent.save()
     const ticket = await dbContext.Tickets.create(body)
-    await ticket.populate('towerEvent')
+    await ticket.populate('event')
     await ticket.populate('account')
     return ticket
   } 

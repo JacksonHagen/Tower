@@ -1,4 +1,5 @@
 import { dbContext } from '../db/DbContext'
+import { BadRequest } from '../utils/Errors.js'
 
 // Private Methods
 
@@ -58,11 +59,6 @@ class AccountService {
     account = await createAccountIfNeeded(account, user)
     await mergeSubsIfNeeded(account, user)
     return account
-  }
-  async getTickets(user) {
-    const account = await this.getAccount(user)
-    const tickets = account.tickets
-    return tickets;
   }
 
   /**
