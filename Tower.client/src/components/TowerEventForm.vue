@@ -106,7 +106,7 @@ export default {
       async createTowerEvent(){
         try {
           const towerEvent = await towerEventsService.createTowerEvent(formData.value)
-          Modal.getOrCreateInstance(document.getElementById('createEventForm')).toggle()
+          Modal.getOrCreateInstance(document.getElementById('createEventModal')).toggle()
           router.push({path: '/events/' + towerEvent.id})
         }
         catch(error) {

@@ -1,21 +1,57 @@
 <template>
+  <div class="row justify-content-around">
+    <div class="col-2 text-center">
+      <button class="btn text-light" @click="filterBy.type = ''">All</button>
+    </div>
+    <div class="col-2 text-center">
+      <button class="btn text-light" @click="filterBy.type = 'convention'">
+        Conventions
+      </button>
+    </div>
+    <div class="col-2 text-center">
+      <button class="btn text-light" @click="filterBy.type = 'sport'">
+        Sports
+      </button>
+    </div>
+    <div class="col-2 text-center">
+      <button class="btn text-light" @click="filterBy.type = 'digital'">
+        Digital
+      </button>
+    </div>
+    <div class="col-2 text-center">
+      <button class="btn text-light" @click="filterBy.type = 'concert'">
+        Concerts
+      </button>
+    </div>
+  </div>
   <div class="row">
-    <TowerEvent v-for="te in towerEvents" :key="te.id" :towerEvent="te" />
+    <TowerEvent v-for="te in filteredList" :key="te.id" :towerEvent="te" />
   </div>
 </template>
 
 <script>
-import { computed } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import { AppState } from '../AppState.js'
 import { towerEventsService } from "../services/TowerEventsService.js";
-import { onMounted } from '@vue/runtime-core';
+import { onMounted, watchEffect } from '@vue/runtime-core';
 export default {
   name: 'Home',
   setup() {
+    const filterBy = ref({type: ''})
+    const filteredList = ref([])
     onMounted(() => {
       towerEventsService.getAllTowerEvents()
     })
-    return{
+    watchEffect(() => {
+      let list = AppState.towerEvents
+      if(filterBy.value.type) {
+        list = list.filter(te => te.type === filterBy.value.type)
+      }
+      filteredList.value = list
+    })
+    return {
+      filteredList,
+      filterBy,
       towerEvents: computed(() => AppState.towerEvents)
     }
   }

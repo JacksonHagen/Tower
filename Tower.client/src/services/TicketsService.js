@@ -12,7 +12,13 @@ class TicketsService
   async createTicket(body) {
     const res = await api.post('api/tickets', body)
     AppState.userTickets.unshift(res.data)
-    logger.log(AppState.userTickets, "SEPERATE", res.data)
+    AppState.capacity = res.data.event.capacity
+  }
+  async deleteTicket(id) {
+    await api.delete('api/tickets/' + id)
+    const index = AppState.userTickets.findIndex(t => t.id === id)
+    AppState.userTickets.splice(index, 1)
+    AppState.capacity = res.data.event.capacity
   }
 }
 

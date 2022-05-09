@@ -22,8 +22,7 @@
             </div>
             <div class="col-6 text-end">
               <h4 class="text-primary lighten-20 fw-light p-2">
-                <!-- TODO make something to parse the date -->
-                {{ towerEvent.startDate }}
+                {{ getDateString() }}
               </h4>
             </div>
           </div>
@@ -32,25 +31,51 @@
               <p class="fw-light">{{ towerEvent.description }}</p>
             </div>
           </div>
-          <div class="row mt-auto">
+          <div class="row mt-auto justify-content-between">
             <div class="col-6 d-flex">
               <h3 class="text-primary me-2">
-                {{ towerEvent.capacity }}
+                {{ eventCapacity }}
               </h3>
               <h3>spots left</h3>
             </div>
-            <!-- TODO implement the v-if and ticket creation -->
-            <div class="col-6 text-end pe-4">
+            <div
+              class="col-2 text-end d-flex flex-column pe-4 w-25"
+              v-if="user.isAuthenticated"
+            >
+              <button
+                class="btn btn-danger"
+                disabled
+                v-if="towerEvent.isCanceled"
+              >
+                Canceled
+              </button>
+              <button
+                class="btn btn-danger"
+                v-else-if="towerEvent.capacity <= 0"
+                disabled
+              >
+                Sold out
+              </button>
               <button
                 class="btn btn-warning"
                 @click="createTicket()"
-                v-if="!isAttending()"
+                v-else-if="!isAttending()"
               >
                 Attend
                 <i class="mdi mdi-crowd mdi-24px"></i>
               </button>
               <button disabled v-else class="btn btn-info">Attending</button>
+              <button
+                class="btn btn-danger mt-4"
+                v-if="
+                  account.id === towerEvent.creatorId && !towerEvent.isCanceled
+                "
+                @click="cancelEvent()"
+              >
+                Cancel
+              </button>
             </div>
+            <div class="col-6" v-else></div>
           </div>
         </div>
       </div>
@@ -64,6 +89,8 @@ import { computed } from '@vue/reactivity';
 import { AppState } from '../AppState.js';
 import { ticketsService } from "../services/TicketsService.js";
 import { onMounted } from '@vue/runtime-core';
+import { towerEventsService } from '../services/TowerEventsService.js';
+import Pop from '../utils/Pop.js';
 export default {
   props:{
     towerEvent:{
@@ -73,17 +100,31 @@ export default {
   },
   setup(props){
     onMounted(async () => {
+      if(!AppState.activeTowerEvent) {
+        await towerEventsService.getActiveTowerEvent(props.towerEvent.id)
+      }
       await ticketsService.getUserTickets()
     })
     return {
       account: computed(() => AppState.account),
       tickets: computed(() => AppState.userTickets),
+      eventCapacity: computed(() => AppState.capacity),
+      user: computed(() => AppState.user),
       isAttending() {
-        const ticket = this.tickets.find(t => t.accountId === this.account.id)
+        const ticket = this.tickets.find(t => t.eventId === props.towerEvent.id)
         if(!ticket) {
           return false
         }
         return true
+      },
+      async cancelEvent() {
+        try {
+          await towerEventsService.cancelEvent(props.towerEvent.id)
+        }
+        catch(error) {
+          console.error("[could not cancel event]", error.message);
+          Pop.toast(error.message, "error");
+        }
       },
       async createTicket() {
         try {
@@ -93,6 +134,11 @@ export default {
           console.error("[could not create ticket]", error.message);
           Pop.toast(error.message, "error");
         }
+      },
+      getDateString() {
+        const date = new Date(props.towerEvent.startDate).toString()
+        let arr = date.split(' ')
+        return `${arr[0]}, ${arr[1]} ${arr[2]}, ${arr[3]}`
       }
     }
   }
@@ -110,6 +156,6 @@ export default {
 .overlay-img {
   object-fit: cover;
   height: auto;
-  width: 33vw;
+  width: 25vw;
 }
 </style>

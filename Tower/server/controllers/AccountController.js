@@ -10,6 +10,7 @@ export class AccountController extends BaseController {
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getUserAccount)
       .get('/tickets', this.getUserTickets)
+      .put('', this.editAccount)
   }
   async getUserTickets(req, res, next) {
     try {
@@ -23,6 +24,14 @@ export class AccountController extends BaseController {
   async getUserAccount(req, res, next) {
     try {
       const account = await accountService.getAccount(req.userInfo)
+      res.send(account)
+    } catch (error) {
+      next(error)
+    }
+  }
+  async editAccount(req, res, next) {
+    try {
+      const account = await accountService.updateAccount(req.userInfo, req.body)
       res.send(account)
     } catch (error) {
       next(error)

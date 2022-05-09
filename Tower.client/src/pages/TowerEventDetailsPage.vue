@@ -4,7 +4,15 @@
       <h1>Loading...</h1>
     </div>
   </div>
-  <TowerEventDetails v-else :towerEvent="activeTowerEvent" />
+  <span v-else>
+    <TowerEventDetails :towerEvent="activeTowerEvent" />
+    <div class="row justify-content-center mt-4 text-center">
+      <Attendees />
+    </div>
+    <div class="container mt-5">
+      <CommentThread />
+    </div>
+  </span>
 </template>
 
 

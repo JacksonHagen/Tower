@@ -5,10 +5,33 @@
       @click="goToPage('/events/' + towerEvent.id)"
     >
       <img :src="towerEvent.coverImg" class="coverImg" alt="..." />
-      <div class="card-img-overlay d-flex align-items-end pb-0">
-        <p class="bg-trans rounded px-3 py-2 w-100 fw-bold">
+      <div
+        class="
+          card-img-overlay
+          d-flex
+          flex-column
+          justify-content-end
+          pb-1
+          px-1
+        "
+      >
+        <div class="bg-trans rounded-top px-3 py-2 w-100 text-dark lighten-10">
           {{ towerEvent.name }}
-        </p>
+          <p class="text-info">{{ towerEvent.capacity }} spots</p>
+          <hr />
+          {{ towerEvent.location }}
+          <br />
+          {{ getDateString() }}
+        </div>
+        <div class="bg-danger text-center py-2" v-if="towerEvent.capacity <= 0">
+          Sold out
+        </div>
+        <div
+          class="bg-danger text-center py-2"
+          v-else-if="towerEvent.isCanceled"
+        >
+          Canceled
+        </div>
       </div>
     </div>
   </div>
@@ -24,11 +47,16 @@ export default {
       required: true
     },
   },
-  setup(){
+  setup(props){
     const router = useRouter()
     return {
       goToPage(path) {
         router.push({path})
+      },
+      getDateString() {
+        const date = new Date(props.towerEvent.startDate).toString()
+        let arr = date.split(' ')
+        return `${arr[0]}, ${arr[1]} ${arr[2]}, ${arr[3]}`
       }
     }
   }
@@ -41,6 +69,9 @@ export default {
   object-fit: cover;
   height: 40vh;
   width: 100%;
+}
+.coverImgDisabled {
+  filter: blur(4px);
 }
 .bg-trans {
   background-color: rgba(255, 255, 255, 0.563);
