@@ -71,6 +71,7 @@
           name="capacity"
           id="capacity"
           class="form-control"
+          min="1"
           v-model="formData.capacity"
         />
       </div>

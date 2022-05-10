@@ -15,9 +15,9 @@
           px-1
         "
       >
-        <div class="bg-trans rounded-top px-3 py-2 w-100 text-dark lighten-10">
+        <div class="bg-trans px-3 py-2 w-100 text-dark lighten-10">
           {{ towerEvent.name }}
-          <p class="text-info">{{ towerEvent.capacity }} spots</p>
+          <p class="text-dark">{{ towerEvent.capacity }} spots</p>
           <hr />
           {{ towerEvent.location }}
           <br />
