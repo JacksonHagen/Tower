@@ -20,17 +20,20 @@
 import { computed } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { AppState } from '../AppState.js'
-import { onMounted } from '@vue/runtime-core'
+import { onMounted, watchEffect } from '@vue/runtime-core'
 import { towerEventsService } from '../services/TowerEventsService.js'
 export default {
   setup(){
     const route = useRoute()
-    onMounted(async () => {
+    // NOTE change to watcheffect and add in everything that needs to be done on the page
+    watchEffect(async () => {
       try {
         await towerEventsService.getActiveTowerEvent(route.params.id)
+        await towerEventsService.getTowerEventComments(route.params.id)
+        await towerEventsService.getTowerEventTickets(route.params.id)
       }
       catch(error) {
-        console.error("[couldnt get event]", error.message);
+        console.error("[could not load]", error.message);
         Pop.toast(error.message, "error");
       }
     })

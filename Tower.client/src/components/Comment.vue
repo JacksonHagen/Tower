@@ -11,7 +11,7 @@
     <div class="col-1 text-end">
       <i
         v-if="comment.creatorId === account.id"
-        class="mdi mdi-delete-outline mdi-24px text-danger"
+        class="mdi mdi-delete-outline mdi-24px text-danger pointer"
         @click="deleteComment(comment.id)"
       ></i>
     </div>
@@ -36,7 +36,7 @@ export default {
       account: computed(() => AppState.account),
       async deleteComment(id){
         try {
-          if(Pop.confirm()) {
+          if(await Pop.confirm()) {
             await commentsService.deleteComment(id)
             Pop.toast('Comment Deleted!', 'success')
           }

@@ -20,15 +20,6 @@ import { AppState } from '../AppState.js'
 export default {
   setup(){
     const route = useRoute()
-    onMounted(async () => {
-      try {
-        await towerEventsService.getTowerEventComments(route.params.id)
-      }
-      catch(error) {
-        console.error("[Could not load comments]", error.message);
-        Pop.toast(error.message, "error");
-      }
-    })
     return {
       user: computed(() => AppState.user ),
       comments: computed(() => AppState.comments)

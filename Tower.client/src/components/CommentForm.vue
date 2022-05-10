@@ -24,10 +24,14 @@ import { useRoute } from 'vue-router'
 import { AppState } from '../AppState.js'
 import { commentsService } from "../services/CommentsService.js";
 import Pop from '../utils/Pop.js';
+import { watchEffect } from '@vue/runtime-core';
 export default {
   setup(){ 
     const route = useRoute()
-    const editable = ref({eventId: route.params.id})
+    let editable = ref({eventId: route.params.id})
+    watchEffect(() =>{
+      editable = ref({eventId: route.params.id})
+    })
     return {
       editable,
       async createComment() {

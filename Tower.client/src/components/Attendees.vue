@@ -26,9 +26,6 @@ export default {
 
   setup(){
     const route = useRoute()
-    onMounted(async () => {
-      await towerEventsService.getTowerEventTickets(route.params.id)
-    })
     return {
       tickets: computed(() => AppState.activeTickets)
 
