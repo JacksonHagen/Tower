@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-3 d-flex flex-column align-items-center my-3">
     <div
-      class="card bg-dark p-1 pointer"
+      class="card bg-dark p-1 pointer cardLoad"
       @click="goToPage('/events/' + towerEvent.id)"
     >
       <img :src="towerEvent.coverImg" class="coverImg" alt="..." />
@@ -67,6 +67,10 @@ export default {
 <style lang="scss" scoped>
 .coverImg {
   object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.cardLoad {
   height: 40vh;
   width: 100%;
 }

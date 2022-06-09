@@ -2,8 +2,8 @@
   <header>
     <Navbar />
   </header>
-  <main class="container-fluid bg-dark lighten-20">
-    <div class="row">
+  <main class="container-fluid bg-dark lighten-20 d-flex flex-column">
+    <div class="row flex-grow-1">
       <div class="col-md-11">
         <router-view />
       </div>
